@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Project 2</string>
+    <string name="red">Red</string>
+    <string name="green">Green</string>
+    <string name="black">Black</string>
+    <string name="blue">Blue</string>
+    <string name="yellow">Yellow</string>
+    <string name="wrong_answers_0">Wrong Answers: </string>
+    <string name="correct_answers_0">Correct Answers: </string>
+    <string name="total_answers_0">Total Answers: </string>
+    <string name="click_on_the_button_that_matches_the_text_color">Click on the button that matches the text color</string>
+</resources>

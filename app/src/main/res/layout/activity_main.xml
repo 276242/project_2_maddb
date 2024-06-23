@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/buttonMemoryGame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Memory Game"
+        app:layout_constraintBottom_toTopOf="@+id/buttonStroopTestGame"
+        app:layout_constraintEnd_toEndOf="@+id/buttonStroopTestGame"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="@+id/buttonStroopTestGame"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/buttonStroopTestGame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stroop Test Game"
+        app:layout_constraintBottom_toTopOf="@+id/buttonVisualSearchGame"
+        app:layout_constraintEnd_toEndOf="@+id/buttonVisualSearchGame"
+        app:layout_constraintStart_toStartOf="@+id/buttonVisualSearchGame"
+        app:layout_constraintTop_toBottomOf="@+id/buttonMemoryGame" />
+
+    <Button
+        android:id="@+id/buttonVisualSearchGame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Visual Search Game"
+        app:layout_constraintBottom_toTopOf="@+id/buttonResults"
+        app:layout_constraintEnd_toEndOf="@+id/buttonResults"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="@+id/buttonResults"
+        app:layout_constraintTop_toBottomOf="@+id/buttonStroopTestGame" />
+
+    <Button
+        android:id="@+id/buttonResults"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Results"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonVisualSearchGame" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
