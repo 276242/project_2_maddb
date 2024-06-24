@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.widget.Button
 import android.widget.GridLayout
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
@@ -18,6 +19,7 @@ class MemoryGameActivity : AppCompatActivity() {
     private var matchesFound = 0
 
     private lateinit var timerTextView: TextView
+    private lateinit var backButton: ImageButton
     private var seconds = 0
     private var isRunning = false
     private var handler: Handler? = null
@@ -27,6 +29,11 @@ class MemoryGameActivity : AppCompatActivity() {
         setContentView(R.layout.activity_memory_game)
 
         timerTextView = findViewById(R.id.timerTextView)
+        backButton = findViewById(R.id.backButton)
+
+        backButton.setOnClickListener {
+            showBackDialogue()
+        }
 
         val gridLayout = findViewById<GridLayout>(R.id.gridLayout)
 
@@ -63,6 +70,22 @@ class MemoryGameActivity : AppCompatActivity() {
             startGame()
         }
     }
+
+    private fun showBackDialogue() {
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage("Do you want to exit or restart the game?")
+        builder.setPositiveButton("Exit") { _, _ ->
+            handler?.removeCallbacksAndMessages(null)
+            goToMainActivity()
+        }
+        builder.setNegativeButton("Restart") { _, _ ->
+            handler?.removeCallbacksAndMessages(null)
+            restartGame()
+        }
+        builder.setNeutralButton("Cancel", null)
+        builder.show()
+    }
+
 
     private fun startGame() {
         val startButton = findViewById<Button>(R.id.startButton)

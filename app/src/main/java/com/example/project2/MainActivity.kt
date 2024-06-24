@@ -37,10 +37,10 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // button to start the results
-        findViewById<Button>(R.id.buttonResults).setOnClickListener {
-            val intent = Intent(this, ResultsActivity::class.java)
-            startActivity(intent)
-        }
+//        // button to start the results
+//        findViewById<Button>(R.id.buttonResults).setOnClickListener {
+//            val intent = Intent(this, ResultsActivity::class.java)
+//            startActivity(intent)
+//        }
     }
 }

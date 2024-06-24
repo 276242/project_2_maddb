@@ -6,8 +6,10 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.Handler
 import android.view.View
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
@@ -45,6 +47,8 @@ class StroopTestGameActivity : AppCompatActivity() {
     private lateinit var countDownTimer: CountDownTimer
     private var timerRunning = false
 
+    private lateinit var backButton: ImageButton
+    private var handler: Handler? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,6 +67,12 @@ class StroopTestGameActivity : AppCompatActivity() {
         correctAnswersTextView = findViewById(R.id.correctAnswersTextView)
         wrongAnswersTextView = findViewById(R.id.wrongAnswersTextView)
 
+        backButton = findViewById(R.id.backButton2)
+
+        backButton.setOnClickListener {
+            showBackDialogue()
+        }
+
         startButton.setOnClickListener {
             startGame()
         }
@@ -76,6 +86,23 @@ class StroopTestGameActivity : AppCompatActivity() {
         disableButtons()
     }
 
+    private fun showBackDialogue() {
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage("Do you want to exit or restart the game?")
+        builder.setPositiveButton("Exit") { _, _ ->
+            handler?.removeCallbacksAndMessages(null)
+            goToMainActivity()
+        }
+        builder.setNegativeButton("Restart") { _, _ ->
+            handler?.removeCallbacksAndMessages(null)
+            countDownTimer.cancel() // Stop the current game
+            resetGame() // Reset the game variables
+            showStartButton() // Show the start button again
+        }
+        builder.setNeutralButton("Cancel", null)
+        builder.show()
+    }
+
     private fun startGame() {
         startButton.visibility = Button.GONE
 //        startButton.visibility = View.GONE
@@ -85,9 +112,11 @@ class StroopTestGameActivity : AppCompatActivity() {
         redButton.visibility = View.VISIBLE
         yellowButton.visibility = View.VISIBLE
         greenButton.visibility = View.VISIBLE
+
         findViewById<TextView>(R.id.totalAttemptsTextView).visibility = View.VISIBLE
         findViewById<TextView>(R.id.correctAnswersTextView).visibility = View.VISIBLE
         findViewById<TextView>(R.id.wrongAnswersTextView).visibility = View.VISIBLE
+
         timerTextView.visibility = View.VISIBLE // Ensure timerTextView is visible
         resetGame()
 
