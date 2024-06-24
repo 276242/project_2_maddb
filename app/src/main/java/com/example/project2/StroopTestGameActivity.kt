@@ -76,6 +76,7 @@ class StroopTestGameActivity : AppCompatActivity() {
         startButton.setOnClickListener {
             startGame()
         }
+        //
 
         blueButton.setOnClickListener { checkAnswer(Color.BLUE) }
         blackButton.setOnClickListener { checkAnswer(Color.BLACK) }
