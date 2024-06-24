@@ -13,8 +13,14 @@
         android:theme="@style/Theme.Project2"
         tools:targetApi="31">
         <activity
-            android:name=".ResultsActivity"
+            android:name=".RegisterActivity"
             android:exported="false" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".ResultsActivity"-->
+<!--            android:exported="false" />-->
         <activity
             android:name=".VisualSearchGameActivity"
             android:exported="false" />
@@ -25,7 +31,7 @@
             android:name=".MemoryGameActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
