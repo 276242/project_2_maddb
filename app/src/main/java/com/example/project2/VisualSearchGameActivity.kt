@@ -183,7 +183,7 @@ class VisualSearchGameActivity : AppCompatActivity() {
 
         val userId = FirebaseAuth.getInstance().currentUser?.uid
         if (userId != null) {
-            FireStoreClass().saveStroopGameAttemptFS(
+            FireStoreClass().saveVisualSearchGameAttemptFS(
                 userId = userId,
                 attempt = gameAttempt
             )
