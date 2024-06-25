@@ -12,6 +12,9 @@ import android.widget.GridView
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.project2.firestore.FireStoreClass
+import com.example.project2.firestore.GameAttempt
+import com.google.firebase.auth.FirebaseAuth
 import java.util.*
 
 class VisualSearchGameActivity : AppCompatActivity() {
@@ -49,7 +52,7 @@ class VisualSearchGameActivity : AppCompatActivity() {
         buttonStart = findViewById(R.id.buttonStart)
         textViewTimer = findViewById(R.id.textViewTimer)
 
-        totalAttemptsTextView = findViewById(R.id.totalAttemptsTextView)
+        totalAnswersTextView = findViewById(R.id.totalAnswersTextView)
         correctAnswersTextView = findViewById(R.id.correctAnswersTextView)
         wrongAnswersTextView = findViewById(R.id.wrongAnswersTextView)
 
@@ -66,7 +69,7 @@ class VisualSearchGameActivity : AppCompatActivity() {
         gridViewLetters.visibility = View.INVISIBLE
         textViewLetterAbove.visibility = View.INVISIBLE
         textViewTimer.visibility = View.INVISIBLE
-        totalAttemptsTextView.visibility = View.INVISIBLE
+        totalAnswersTextView.visibility = View.INVISIBLE
         correctAnswersTextView.visibility = View.INVISIBLE
         wrongAnswersTextView.visibility = View.INVISIBLE
     }
@@ -91,7 +94,7 @@ class VisualSearchGameActivity : AppCompatActivity() {
         textViewLetterAbove.visibility = View.VISIBLE
         gridViewLetters.visibility = View.VISIBLE
         textViewTimer.visibility = View.VISIBLE
-        totalAttemptsTextView.visibility = View.VISIBLE
+        totalAnswersTextView.visibility = View.VISIBLE
         correctAnswersTextView.visibility = View.VISIBLE
         wrongAnswersTextView.visibility = View.VISIBLE
 
@@ -106,7 +109,7 @@ class VisualSearchGameActivity : AppCompatActivity() {
             override fun onFinish() {
                 textViewTimer.text = "Time's up!"
                 disableGridClicks()
-                showEndGameDialog()
+                showWinDialog()
             }
         }.start()
     }
@@ -149,7 +152,7 @@ class VisualSearchGameActivity : AppCompatActivity() {
                 wrongAnswers++
             }
 
-            totalAttemptsTextView.text = "Total Attempts: $totalAnswers"
+            totalAnswersTextView.text = "Total Answers: $totalAnswers"
             correctAnswersTextView.text = "Correct Answers: $correctAnswers"
             wrongAnswersTextView.text = "Wrong Answers: $wrongAnswers"
 
@@ -162,7 +165,38 @@ class VisualSearchGameActivity : AppCompatActivity() {
         gridViewLetters.setOnItemClickListener(null)
     }
 
-    private fun showEndGameDialog() {
+    private fun showWinDialog() {
+        totalAttempts++
+        bestScore = correctAnswers.toLong()
+
+        if (correctAnswers > bestScore) {
+            bestScore = correctAnswers.toLong()
+        }
+
+        val gameAttempt = GameAttempt(
+            correctAnswers = correctAnswers,
+            wrongAnswers = wrongAnswers,
+            totalAnswers = totalAnswers,
+            totalAttempts = totalAttempts,
+            bestScore = bestScore // Ensure bestScore is set correctly
+        )
+
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        if (userId != null) {
+            FireStoreClass().saveStroopGameAttemptFS(
+                userId = userId,
+                attempt = gameAttempt
+            )
+
+            FireStoreClass().updateGameStatsFS(
+                userId = userId,
+                gameType = "visualSearchTestGame",
+                bestScore = bestScore.toInt(),
+                totalAttempts = totalAttempts
+            )
+        }
+
+
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Game Over")
         builder.setMessage("You found $correctAnswers / $totalAnswers correct letters!")
@@ -196,7 +230,7 @@ class VisualSearchGameActivity : AppCompatActivity() {
         gridViewLetters.visibility = View.INVISIBLE
         textViewTimer.visibility = View.INVISIBLE
 
-        totalAttemptsTextView.visibility = View.INVISIBLE
+        totalAnswersTextView.visibility = View.INVISIBLE
         correctAnswersTextView.visibility = View.INVISIBLE
         wrongAnswersTextView.visibility = View.INVISIBLE
 
@@ -206,7 +240,7 @@ class VisualSearchGameActivity : AppCompatActivity() {
         // Reset text views
         textViewLetterAbove.text = ""
         textViewTimer.text = ""
-        totalAttemptsTextView.text = "Total Attempts: 0"
+        totalAnswersTextView.text = "Total Answers: 0"
         correctAnswersTextView.text = "Correct Answers: 0"
         wrongAnswersTextView.text = "Wrong Answers: 0"
     }
