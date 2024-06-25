@@ -5,5 +5,5 @@ data class GameAttempt(
     val correctAnswers: Int? = null,
     val wrongAnswers: Int? = null,
     val totalAttempts: Int? = null,
-    val bestScore: Int? = null
+    val bestScore: Long? = null
 )

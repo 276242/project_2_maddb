@@ -1,5 +1,7 @@
 package com.example.project2.firestore
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import com.example.project2.MainActivity
 import com.example.project2.RegisterActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -43,8 +45,102 @@ class FireStoreClass {
         }
     }
 
+//    fun saveMemoryGameAttemptFS(userId: String, attempt: GameAttempt) {
+//        val gameRef = firestore.collection("users")
+//            .document(userId)
+//            .collection("games")
+//            .document("memoryGame")
+//
+//        gameRef.collection("attempts")
+//            .add(attempt)
+//            .addOnSuccessListener {
+//                // Successfully saved attempt
+//            }
+//            .addOnFailureListener {
+//                // Handle failure to save attempt
+//            }
+//
+//        // Update bestScore and totalAttempts
+//        firestore.runTransaction { transaction ->
+//            val snapshot = transaction.get(gameRef)
+//
+//            val currentBestScore = snapshot.getLong("bestScore") ?: Long.MAX_VALUE
+//            val currentTotalAttempts = snapshot.getLong("totalAttempts") ?: 0
+//
+//            if (attempt.completionTime!! < currentBestScore) {
+//                transaction.update(gameRef, "bestScore", attempt.completionTime)
+//            }
+//
+//            transaction.update(gameRef, "totalAttempts", currentTotalAttempts + 1)
+//        }.addOnSuccessListener {
+//            // Successfully updated game statistics
+//        }.addOnFailureListener { e ->
+//            // Handle failure to update game statistics
+//        }
+//    }
+
     fun saveMemoryGameAttemptFS(userId: String, attempt: GameAttempt) {
-        saveGameAttemptFS(userId, "memoryGame", attempt)
+        FirebaseFirestore.getInstance().collection("users")
+            .document(userId)
+            .collection("games")
+            .document("memoryGame")
+            .collection("attempts")
+            .add(attempt)
+            .addOnSuccessListener {
+                // Successfully saved attempt
+            }
+            .addOnFailureListener {
+                // Handle failure to save attempt
+            }
+    }
+
+    fun updateGameStatsFS(userId: String, gameType: String, bestScore: Int, totalAttempts: Int) {
+        val gameRef = firestore.collection("users")
+            .document(userId)
+            .collection("games")
+            .document(gameType)
+
+        firestore.runTransaction { transaction ->
+            val snapshot = transaction.get(gameRef)
+
+            if (snapshot.exists()) {
+                val currentBestScore = snapshot.getLong("bestScore") ?: Long.MAX_VALUE
+                val currentTotalAttempts = snapshot.getLong("totalAttempts") ?: 0
+
+                if (bestScore < currentBestScore) {
+                    transaction.update(gameRef, "bestScore", bestScore)
+                }
+
+                transaction.update(gameRef, "totalAttempts", currentTotalAttempts + 1)
+            }
+        }.addOnSuccessListener {
+            // Successfully updated game statistics
+        }.addOnFailureListener { e ->
+            // Handle failure to update game statistics
+        }
+    }
+
+
+    fun getGameStatsFS(userId: String, gameType: String, callback: (GameStats?) -> Unit) {
+        FirebaseFirestore.getInstance().collection("users")
+            .document(userId)
+            .collection("games")
+            .document(gameType)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document != null && document.exists()) {
+                    val bestScore = document.getLong("bestScore")?.toInt() ?: 0
+                    val totalAttempts = document.getLong("totalAttempts")?.toInt() ?: 0
+                    // Add other game stats fields if needed
+                    callback(GameStats(bestScore, totalAttempts))
+                } else {
+                    callback(null)
+                }
+            }
+            .addOnFailureListener { e ->
+                // Handle failure if needed
+                callback(null)
+            }
     }
 
     fun saveStroopGameAttemptFS(userId: String, attempt: GameAttempt) {
@@ -56,60 +152,13 @@ class FireStoreClass {
     }
 
     private fun saveGameAttemptFS(userId: String, gameType: String, attempt: GameAttempt) {
-        firestore.collection("users")
+        FirebaseFirestore.getInstance().collection("users")
             .document(userId)
             .collection("games")
             .document(gameType)
             .collection("attempts")
             .add(attempt)
-            .addOnSuccessListener {  }
-            .addOnFailureListener {  }
+            .addOnSuccessListener { }
+            .addOnFailureListener { }
     }
-
-
-
-//    fun saveGameAttemptFS(userId: String, gameType: String, attempt: GameAttempt, onSuccess: () -> Unit, onFailure: (String) -> Unit) {
-//        firestore.collection("users")
-//            .document(userId)
-//            .collection("games")
-//            .document(gameType)
-//            .collection("attempts")
-//            .add(attempt)
-//            .addOnSuccessListener { onSuccess() }
-//            .addOnFailureListener { e -> onFailure(e.message ?: "Unknown error") }
-//    }
-
-    // Example method to update user profile (not necessarily used in this specific context but useful for extending functionality)
-//    fun updateUserProfileFS(userId: String, name: String, email: String, onSuccess: () -> Unit, onFailure: (String) -> Unit) {
-//        val userUpdates = hashMapOf(
-//            "name" to name,
-//            "email" to email
-//        )
-//
-//        firestore.collection("users")
-//            .document(userId)
-//            .update(userUpdates)
-//            .addOnSuccessListener { onSuccess() }
-//            .addOnFailureListener { e -> onFailure(e.message ?: "Unknown error") }
-//    }
-}
-
-//
-//class FireStoreClass {
-//
-//    private val mFireStore = FirebaseFirestore.getInstance()
-//
-//
-//    fun registerUserFS(activity: RegisterActivity, userInfo: User){
-//
-//        mFireStore.collection("users")
-//            .document(userInfo.id)
-//            .set(userInfo, SetOptions.merge())
-//            .addOnSuccessListener {
-//                activity.userRegistrationSuccess()
-//
-//            }
-//            .addOnFailureListener{
-//
-//            }
-//    }
+ }

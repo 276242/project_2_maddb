@@ -1,6 +1,5 @@
 package com.example.project2
 
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
@@ -10,6 +9,9 @@ import android.widget.GridLayout
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.project2.firestore.FireStoreClass
+import com.example.project2.firestore.GameAttempt
+import com.google.firebase.auth.FirebaseAuth
 
 class MemoryGameActivity : AppCompatActivity() {
 
@@ -17,6 +19,9 @@ class MemoryGameActivity : AppCompatActivity() {
     private lateinit var buttonImages: Array<Int>
     private var clickedButtons = mutableListOf<Button>()
     private var matchesFound = 0
+    private var totalAttempts = 0
+    private var bestScore = Long.MAX_VALUE
+    private var completionTime = 0L
 
     private lateinit var timerTextView: TextView
     private lateinit var backButton: ImageButton
@@ -86,7 +91,6 @@ class MemoryGameActivity : AppCompatActivity() {
         builder.show()
     }
 
-
     private fun startGame() {
         val startButton = findViewById<Button>(R.id.startButton)
         startButton.visibility = Button.GONE
@@ -141,7 +145,36 @@ class MemoryGameActivity : AppCompatActivity() {
     }
 
     private fun showWinDialog() {
+        totalAttempts++
         isRunning = false
+        completionTime = seconds.toLong()
+
+        if (completionTime < bestScore) {
+            bestScore = completionTime
+        }
+
+        val gameAttempt = GameAttempt(
+            completionTime = completionTime,
+            bestScore = bestScore,
+            totalAttempts = totalAttempts
+        )
+
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        if (userId != null) {
+            FireStoreClass().saveMemoryGameAttemptFS(
+                userId = userId,
+                attempt = gameAttempt
+            )
+        }
+
+        if (userId != null) {
+            FireStoreClass().updateGameStatsFS(
+                userId = userId,
+                gameType = "memoryGame",
+                bestScore = bestScore.toInt(), // Ensure bestScore is stored as Int in Firestore
+                totalAttempts = totalAttempts
+            )
+        }
 
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Congratulations!")
@@ -155,14 +188,18 @@ class MemoryGameActivity : AppCompatActivity() {
         builder.show()
     }
 
+
     private fun goToMainActivity() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
+        finish()
     }
 
     private fun restartGame() {
         matchesFound = 0
+        totalAttempts = 0
         seconds = 0
+        bestScore = Long.MAX_VALUE
 
         buttonImages.shuffle()
         for (i in buttons.indices) {
