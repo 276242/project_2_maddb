@@ -95,6 +95,7 @@ class FireStoreClass {
     }
 
     fun updateGameStatsFS(userId: String, gameType: String, bestScore: Int, totalAttempts: Int) {
+        val firestore = FirebaseFirestore.getInstance()
         val gameRef = firestore.collection("users")
             .document(userId)
             .collection("games")
@@ -103,14 +104,23 @@ class FireStoreClass {
         firestore.runTransaction { transaction ->
             val snapshot = transaction.get(gameRef)
 
-            if (snapshot.exists()) {
-                val currentBestScore = snapshot.getLong("bestScore") ?: Long.MAX_VALUE
-                val currentTotalAttempts = snapshot.getLong("totalAttempts") ?: 0
+            if (!snapshot.exists()) {
+                // Initialize the game stats document if it doesn't exist
+                val gameStats = hashMapOf(
+                    "bestScore" to bestScore,
+                    "totalAttempts" to totalAttempts
+                )
+                transaction.set(gameRef, gameStats)
+            } else {
+                val currentBestScore = snapshot.getLong("bestScore")?.toInt() ?: Int.MAX_VALUE
+                val currentTotalAttempts = snapshot.getLong("totalAttempts")?.toInt() ?: 0
 
+                // Update the best score if the new score is better
                 if (bestScore < currentBestScore) {
                     transaction.update(gameRef, "bestScore", bestScore)
                 }
 
+                // Increment the total attempts
                 transaction.update(gameRef, "totalAttempts", currentTotalAttempts + 1)
             }
         }.addOnSuccessListener {
@@ -119,6 +129,7 @@ class FireStoreClass {
             // Handle failure to update game statistics
         }
     }
+
 
 
     fun getGameStatsFS(userId: String, gameType: String, callback: (GameStats?) -> Unit) {
