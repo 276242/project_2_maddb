@@ -83,11 +83,9 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     fun goToMainActivity() {
         val user = FirebaseAuth.getInstance().currentUser
         val uid = user?.email.toString()
-        val name = user?.displayName.toString()
 
         val intent = Intent(this, MainActivity::class.java)
         intent.putExtra("uID", uid)
-        intent.putExtra("name", name)
         startActivity(intent)
     }
 }

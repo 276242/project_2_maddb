@@ -1,6 +1,8 @@
 package com.example.project2.firestore
 
+import com.example.project2.MainActivity
 import com.example.project2.RegisterActivity
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 
@@ -17,6 +19,29 @@ class FireStoreClass {
             .addOnFailureListener { }
     }
 
+    fun getUserDetails(activity: MainActivity) {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        if (currentUser != null) {
+            val currentUserId = currentUser.uid
+
+            FirebaseFirestore.getInstance().collection("users")
+                .document(currentUserId)
+                .get()
+                .addOnSuccessListener { document ->
+                    val user = document.toObject(User::class.java)
+                    if (user != null) {
+                        activity.onUserDetailsReceived(user)
+                    } else {
+                        // Handle case where document does not exist or cannot be mapped to User object
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    // Handle Firestore query failure
+                }
+        } else {
+            // Handle case where no user is logged in
+        }
+    }
 
     fun saveMemoryGameAttemptFS(userId: String, attempt: GameAttempt) {
         saveGameAttemptFS(userId, "memoryGame", attempt)

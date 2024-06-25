@@ -14,9 +14,9 @@
         android:text="Memory Game"
         app:layout_constraintBottom_toTopOf="@+id/buttonStroopTestGame"
         app:layout_constraintEnd_toEndOf="@+id/buttonStroopTestGame"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.476"
         app:layout_constraintStart_toStartOf="@+id/buttonStroopTestGame"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/welcomeText" />
 
     <Button
         android:id="@+id/buttonStroopTestGame"
@@ -25,6 +25,7 @@
         android:text="Stroop Test Game"
         app:layout_constraintBottom_toTopOf="@+id/buttonVisualSearchGame"
         app:layout_constraintEnd_toEndOf="@+id/buttonVisualSearchGame"
+        app:layout_constraintHorizontal_bias="0.538"
         app:layout_constraintStart_toStartOf="@+id/buttonVisualSearchGame"
         app:layout_constraintTop_toBottomOf="@+id/buttonMemoryGame" />
 
@@ -49,5 +50,18 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonVisualSearchGame" />
+
+    <TextView
+        android:id="@+id/welcomeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="176dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="176dp"
+        android:text="Welcome"
+        app:layout_constraintBottom_toTopOf="@+id/buttonMemoryGame"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
