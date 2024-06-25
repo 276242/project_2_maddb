@@ -12,6 +12,9 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.project2.firestore.FireStoreClass
+import com.example.project2.firestore.GameAttempt
+import com.google.firebase.auth.FirebaseAuth
 
 class StroopTestGameActivity : AppCompatActivity() {
 
@@ -23,6 +26,11 @@ class StroopTestGameActivity : AppCompatActivity() {
     private lateinit var greenButton: Button
     private lateinit var startButton: Button
     private lateinit var timerTextView: TextView
+    private var totalAttempts = 0
+    private var bestScore = Long.MAX_VALUE
+    private var correctAnswers = 0
+    private var wrongAnswers = 0
+    private var totalAnswers = 0
 
     private val colors = arrayOf("Blue", "Black", "Red", "Yellow", "Green")
     private val colorValues = mapOf(
@@ -36,11 +44,8 @@ class StroopTestGameActivity : AppCompatActivity() {
     private var currentColorName = ""
     private var currentColorValue = 0
 
-    private var totalAttempts = 0
-    private var correctAnswers = 0
-    private var wrongAnswers = 0
 
-    private lateinit var totalAttemptsTextView: TextView
+    private lateinit var totalAnswersTextView: TextView
     private lateinit var correctAnswersTextView: TextView
     private lateinit var wrongAnswersTextView: TextView
 
@@ -63,7 +68,7 @@ class StroopTestGameActivity : AppCompatActivity() {
         startButton = findViewById(R.id.startButton)
         timerTextView = findViewById(R.id.timerTextView)
 
-        totalAttemptsTextView = findViewById(R.id.totalAttemptsTextView)
+        totalAnswersTextView = findViewById(R.id.totalAnswersTextView)
         correctAnswersTextView = findViewById(R.id.correctAnswersTextView)
         wrongAnswersTextView = findViewById(R.id.wrongAnswersTextView)
 
@@ -114,7 +119,7 @@ class StroopTestGameActivity : AppCompatActivity() {
         yellowButton.visibility = View.VISIBLE
         greenButton.visibility = View.VISIBLE
 
-        findViewById<TextView>(R.id.totalAttemptsTextView).visibility = View.VISIBLE
+        findViewById<TextView>(R.id.totalAnswersTextView).visibility = View.VISIBLE
         findViewById<TextView>(R.id.correctAnswersTextView).visibility = View.VISIBLE
         findViewById<TextView>(R.id.wrongAnswersTextView).visibility = View.VISIBLE
 
@@ -157,7 +162,7 @@ class StroopTestGameActivity : AppCompatActivity() {
     private fun checkAnswer(selectedColor: Int) {
         if (!timerRunning) return
 
-        totalAttempts++
+        totalAnswers++
 
         if (selectedColor == currentColorValue) {
             correctAnswers++
@@ -165,7 +170,7 @@ class StroopTestGameActivity : AppCompatActivity() {
             wrongAnswers++
         }
 
-        totalAttemptsTextView.text = "Total Attempts: $totalAttempts"
+        totalAnswersTextView.text = "Total Answers: $totalAnswers"
         correctAnswersTextView.text = "Correct Answers: $correctAnswers"
         wrongAnswersTextView.text = "Wrong Answers: $wrongAnswers"
 
@@ -173,9 +178,39 @@ class StroopTestGameActivity : AppCompatActivity() {
     }
 
     private fun showWinDialog() {
+        totalAttempts++
+        bestScore = correctAnswers.toLong()
+
+        if (correctAnswers > bestScore) {
+            bestScore = correctAnswers.toLong()
+        }
+
+        val gameAttempt = GameAttempt(
+            correctAnswers = correctAnswers,
+            wrongAnswers = wrongAnswers,
+            totalAnswers = totalAnswers,
+            totalAttempts = totalAttempts,
+            bestScore = bestScore // Ensure bestScore is set correctly
+        )
+
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        if (userId != null) {
+            FireStoreClass().saveStroopGameAttemptFS(
+                userId = userId,
+                attempt = gameAttempt
+            )
+
+            FireStoreClass().updateGameStatsFS(
+                userId = userId,
+                gameType = "stroopTestGame",
+                bestScore = bestScore.toInt(),
+                totalAttempts = totalAttempts
+            )
+        }
+
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Time's up!")
-        builder.setMessage("Your score is $correctAnswers/$totalAttempts!")
+        builder.setMessage("Your score is $correctAnswers/$totalAnswers!")
         builder.setPositiveButton("Play Again") { _, _ ->
             countDownTimer.cancel() // Stop the current game
             resetGame() // Reset the game variables
@@ -187,6 +222,7 @@ class StroopTestGameActivity : AppCompatActivity() {
         builder.show()
     }
 
+
     private fun showStartButton() {
         startButton.visibility = Button.VISIBLE
         colorName.visibility = View.INVISIBLE
@@ -195,7 +231,7 @@ class StroopTestGameActivity : AppCompatActivity() {
         redButton.visibility = View.INVISIBLE
         yellowButton.visibility = View.INVISIBLE
         greenButton.visibility = View.INVISIBLE
-        findViewById<TextView>(R.id.totalAttemptsTextView).visibility = View.INVISIBLE
+        findViewById<TextView>(R.id.totalAnswersTextView).visibility = View.INVISIBLE
         findViewById<TextView>(R.id.correctAnswersTextView).visibility = View.INVISIBLE
         findViewById<TextView>(R.id.wrongAnswersTextView).visibility = View.INVISIBLE
         timerTextView.visibility = View.INVISIBLE
@@ -209,11 +245,11 @@ class StroopTestGameActivity : AppCompatActivity() {
 
 
     private fun resetGame() {
-        totalAttempts = 0
+        totalAnswers = 0
         correctAnswers = 0
         wrongAnswers = 0
 
-        totalAttemptsTextView.text = "Total Attempts: 0"
+        totalAnswersTextView.text = "Total Answers: 0"
         correctAnswersTextView.text = "Correct Answers: 0"
         wrongAnswersTextView.text = "Wrong Answers: 0"
         timerTextView.text = ""
@@ -237,7 +273,7 @@ class StroopTestGameActivity : AppCompatActivity() {
         redButton.visibility = View.INVISIBLE
         yellowButton.visibility = View.INVISIBLE
         greenButton.visibility = View.INVISIBLE
-        findViewById<TextView>(R.id.totalAttemptsTextView).visibility = View.INVISIBLE
+        findViewById<TextView>(R.id.totalAnswersTextView).visibility = View.INVISIBLE
         findViewById<TextView>(R.id.correctAnswersTextView).visibility = View.INVISIBLE
         findViewById<TextView>(R.id.wrongAnswersTextView).visibility = View.INVISIBLE
 

@@ -112,11 +112,11 @@ class FireStoreClass {
                 )
                 transaction.set(gameRef, gameStats)
             } else {
-                val currentBestScore = snapshot.getLong("bestScore")?.toInt() ?: Int.MAX_VALUE
+                val currentBestScore = snapshot.getLong("bestScore")?.toInt() ?: -1
                 val currentTotalAttempts = snapshot.getLong("totalAttempts")?.toInt() ?: 0
 
-                // Update the best score if the new score is better
-                if (bestScore < currentBestScore) {
+                // Update the best score if the new score is better or if the current best score is -1
+                if (currentBestScore == -1 || bestScore > currentBestScore) {
                     transaction.update(gameRef, "bestScore", bestScore)
                 }
 
@@ -129,6 +129,7 @@ class FireStoreClass {
             // Handle failure to update game statistics
         }
     }
+
 
 
 
@@ -155,21 +156,44 @@ class FireStoreClass {
     }
 
     fun saveStroopGameAttemptFS(userId: String, attempt: GameAttempt) {
-        saveGameAttemptFS(userId, "stroopTestGame", attempt)
+        firestore.collection("users")
+            .document(userId)
+            .collection("games")
+            .document("stroopTestGame")
+            .collection("attempts")
+            .add(attempt)
+            .addOnSuccessListener {
+                // Successfully saved attempt
+            }
+            .addOnFailureListener {
+                // Handle failure to save attempt
+            }
     }
 
     fun saveVisualSearchGameAttemptFS(userId: String, attempt: GameAttempt) {
-        saveGameAttemptFS(userId, "visualSearchTestGame", attempt)
-    }
-
-    private fun saveGameAttemptFS(userId: String, gameType: String, attempt: GameAttempt) {
-        FirebaseFirestore.getInstance().collection("users")
+        firestore.collection("users")
             .document(userId)
             .collection("games")
-            .document(gameType)
+            .document("visualSearchTestGame")
             .collection("attempts")
             .add(attempt)
-            .addOnSuccessListener { }
-            .addOnFailureListener { }
+            .addOnSuccessListener {
+                // Successfully saved attempt
+            }
+            .addOnFailureListener {
+                // Handle failure to save attempt
+            }
     }
+
+
+//    private fun saveGameAttemptFS(userId: String, gameType: String, attempt: GameAttempt) {
+//        FirebaseFirestore.getInstance().collection("users")
+//            .document(userId)
+//            .collection("games")
+//            .document(gameType)
+//            .collection("attempts")
+//            .add(attempt)
+//            .addOnSuccessListener { }
+//            .addOnFailureListener { }
+//    }
  }

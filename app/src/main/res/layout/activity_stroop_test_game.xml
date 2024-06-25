@@ -119,13 +119,13 @@
         app:layout_constraintTop_toBottomOf="@+id/redButton" />
 
     <TextView
-        android:id="@+id/totalAttemptsTextView"
+        android:id="@+id/totalAnswersTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="3dp"
-        android:text="Total Attempts: 0"
+        android:text="Total Answers: 0"
         android:textSize="18sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/correctAnswersTextView"
@@ -147,7 +147,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.467"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/totalAttemptsTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/totalAnswersTextView" />
 
     <TextView
         android:id="@+id/wrongAnswersTextView"

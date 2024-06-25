@@ -23,11 +23,14 @@ class VisualSearchGameActivity : AppCompatActivity() {
 
     private val letters = ('A'..'Z').toList()
     private var correctLetter: Char = 'A'
+
+    private var totalAttempts = 0
+    private var bestScore = Long.MAX_VALUE
     private var correctAnswers = 0
-    private var incorrectAnswers = 0
+    private var wrongAnswers = 0
     private var totalAnswers = 0
 
-    private lateinit var totalAttemptsTextView: TextView
+    private lateinit var totalAnswersTextView: TextView
     private lateinit var correctAnswersTextView: TextView
     private lateinit var wrongAnswersTextView: TextView
 
@@ -110,7 +113,7 @@ class VisualSearchGameActivity : AppCompatActivity() {
 
     private fun resetGame() {
         correctAnswers = 0
-        incorrectAnswers = 0
+        wrongAnswers = 0
         totalAnswers = 0
         textViewTimer.text = ""
 
@@ -143,12 +146,12 @@ class VisualSearchGameActivity : AppCompatActivity() {
                 correctAnswers++
             }
             else {
-                incorrectAnswers++
+                wrongAnswers++
             }
 
             totalAttemptsTextView.text = "Total Attempts: $totalAnswers"
             correctAnswersTextView.text = "Correct Answers: $correctAnswers"
-            wrongAnswersTextView.text = "Wrong Answers: $incorrectAnswers"
+            wrongAnswersTextView.text = "Wrong Answers: $wrongAnswers"
 
             // Show next letter and grid
             showNextLetterAndGrid()
@@ -185,7 +188,7 @@ class VisualSearchGameActivity : AppCompatActivity() {
         // Reset game variables
         correctAnswers = 0
         totalAnswers = 0
-        incorrectAnswers = 0
+        wrongAnswers = 0
 
         // Reset visibility of views
         buttonStart.visibility = View.VISIBLE
