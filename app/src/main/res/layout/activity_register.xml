@@ -91,7 +91,7 @@
         android:layout_marginStart="147dp"
         android:layout_marginEnd="147dp"
         android:layout_marginBottom="30dp"
-        android:backgroundTint="@android:color/holo_blue_light"
+        android:backgroundTint="@color/light_blue"
         android:clickable="true"
         android:text="SIGN UP"
         android:textSize="19sp"

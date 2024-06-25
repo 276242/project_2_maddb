@@ -5,7 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MemoryGameActivity">
+    tools:context=".MemoryGameActivity"
+    android:background="@color/pink_bg">
 
     <ImageButton
         android:id="@+id/backButton"
@@ -29,6 +30,7 @@
         android:padding="8dp"
         android:text="Time: 0s"
         android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/gridLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -49,10 +51,13 @@
 
     <Button
         android:id="@+id/startButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Start"
+        android:layout_width="115dp"
+        android:layout_height="57dp"
+        android:text="START"
+        android:textSize="21sp"
         android:visibility="visible"
+        app:cornerRadius="10dp"
+        app:backgroundTint="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.508"

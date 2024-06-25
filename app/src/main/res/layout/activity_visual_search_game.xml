@@ -5,7 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".VisualSearchGameActivity">
+    tools:context=".VisualSearchGameActivity"
+    android:background="@color/blue_bg">
 
     <ImageButton
         android:id="@+id/backButton3"
@@ -29,6 +30,7 @@
         android:layout_marginBottom="40dp"
         android:textSize="40sp"
         android:visibility="invisible"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/gridViewLetters"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,6 +45,7 @@
         android:numColumns="5"
         android:verticalSpacing="10dp"
         android:visibility="invisible"
+        app:backgroundTint="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/textViewTimer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.478"
@@ -66,7 +69,10 @@
         android:id="@+id/buttonStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start"
+        android:text="START"
+        android:textSize="24sp"
+        app:cornerRadius="10dp"
+        app:backgroundTint="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -2,4 +2,12 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="light_blue">#97CED6</color>
+    <color name="baby_pink">#E3A9B7</color>
+    <color name="lavender">#C6A4DC</color>
+    <color name="baby_blue">#8DB2DE</color>
+    <color name="pink_bg">#f1d4db</color>
+    <color name="lav_bg">#e6d6ef</color>
+    <color name="blue_bg">#ccdcf0</color>
+    <color name="button_color">#656969</color>
 </resources>

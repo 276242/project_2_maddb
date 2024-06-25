@@ -7,58 +7,64 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <!--    -->
+
     <Button
         android:id="@+id/buttonMemoryGame"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="240dp"
+        android:layout_height="74dp"
+        android:layout_marginStart="85dp"
+        android:layout_marginEnd="86dp"
         android:text="Memory Game"
+        android:textSize="23sp"
+        app:cornerRadius="10dp"
+        app:backgroundTint="@color/baby_pink"
         app:layout_constraintBottom_toTopOf="@+id/buttonStroopTestGame"
-        app:layout_constraintEnd_toEndOf="@+id/buttonStroopTestGame"
-        app:layout_constraintHorizontal_bias="0.476"
-        app:layout_constraintStart_toStartOf="@+id/buttonStroopTestGame"
-        app:layout_constraintTop_toBottomOf="@id/welcomeText" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/welcomeText" />
 
     <Button
         android:id="@+id/buttonStroopTestGame"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="240dp"
+        android:layout_height="77dp"
+        android:layout_marginStart="85dp"
+        android:layout_marginEnd="86dp"
         android:text="Stroop Test Game"
+        android:textSize="23sp"
+        app:cornerRadius="10dp"
+        app:backgroundTint="@color/lavender"
         app:layout_constraintBottom_toTopOf="@+id/buttonVisualSearchGame"
-        app:layout_constraintEnd_toEndOf="@+id/buttonVisualSearchGame"
-        app:layout_constraintHorizontal_bias="0.538"
-        app:layout_constraintStart_toStartOf="@+id/buttonVisualSearchGame"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonMemoryGame" />
 
     <Button
         android:id="@+id/buttonVisualSearchGame"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="240dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="85dp"
+        android:layout_marginEnd="86dp"
+        android:layout_marginBottom="152dp"
         android:text="Visual Search Game"
-        app:layout_constraintBottom_toTopOf="@+id/buttonResults"
-        app:layout_constraintEnd_toEndOf="@+id/buttonResults"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="@+id/buttonResults"
-        app:layout_constraintTop_toBottomOf="@+id/buttonStroopTestGame" />
-
-    <Button
-        android:id="@+id/buttonResults"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Results"
+        android:textSize="21sp"
+        app:cornerRadius="10dp"
+        app:backgroundTint="@color/baby_blue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonVisualSearchGame" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonStroopTestGame" />
 
     <TextView
         android:id="@+id/welcomeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="176dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="50dp"
         android:layout_marginEnd="176dp"
+        android:layout_marginBottom="40dp"
         android:text="Welcome"
+        android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/buttonMemoryGame"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
